@@ -51,13 +51,6 @@ class Vacancy:
     def __lt__(self, other):
         """Метод сравнивает между собой по зарплате и возвращает вакансию с большей зарплатой"""
         if self.salary < other.salary:
-            return other.salary
+            return True
         else:
-            return self.salary
-
-    # def __eq__(self, other):
-    #     if self.salary == "Не указана" or other.salary == "Не указана":
-    #         print("Не удалось выполнить сравнение т.к. зарплата не указана")
-    #     else:
-    #         if self.salary == other.salary:
-    #             print(f"Зарплата {self.name} равна зарплате {other.name}")
+            return False
