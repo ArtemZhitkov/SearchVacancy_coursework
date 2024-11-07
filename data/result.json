@@ -1,0 +1,73 @@
+[
+    {
+        "name": "Backend-разработчик",
+        "url": "https://hh.ru/vacancy/110325720",
+        "area": "Москва",
+        "salary": 0,
+        "description": "Опыт коммерческой разработки на <highlighttext>Python</highlighttext> от 2 лет. Глубокое знание Django или FastAPI. Опыт работы с PostgreSQL и проектированием баз..."
+    },
+    {
+        "name": "Тестировщик (гибрид)",
+        "url": "https://hh.ru/vacancy/110265145",
+        "area": "Москва",
+        "salary": 0,
+        "description": "Навыки по работы в Unix/Linux + скриптование: Bash, <highlighttext>Python</highlighttext> и т. п.. Умение использовать современный инструментарий разработки: Git, Docker..."
+    },
+    {
+        "name": "Тестировщик (гибрид)",
+        "url": "https://hh.ru/vacancy/110265145",
+        "area": "Москва",
+        "salary": 0,
+        "description": "Навыки по работы в Unix/Linux + скриптование: Bash, <highlighttext>Python</highlighttext> и т. п.. Умение использовать современный инструментарий разработки: Git, Docker..."
+    },
+    {
+        "name": "Python-разработчик",
+        "url": "https://hh.ru/vacancy/110307647",
+        "area": "Москва",
+        "salary": 0,
+        "description": "Уверенное знание <highlighttext>Python</highlighttext> 3 и опыт работы с Django Rest Framework (DRF) и FastAPI от 2 лет. - Понимание принципов REST..."
+    },
+    {
+        "name": "Инженер по тестированию / QA Engineer",
+        "url": "https://hh.ru/vacancy/109052250",
+        "area": "Москва",
+        "salary": 0,
+        "description": "Опыт работы с Docker\\Postgresql\\Etcd\\Nginx\\ProxmoxVE\\Zabbix\\AWX. Знание SQL. Хороший командный игрок. Базовые знания <highlighttext>Python</highlighttext>. "
+    },
+
+    {
+        "name": "React Front-End Developer (Frontend разработчик)",
+        "url": "https://hh.ru/vacancy/109792373",
+        "area": "Ташкент",
+        "salary": 0,
+        "description": "Базовые знания HTML / CSS / JavaScript. React / React Native. English (на уровне понимания технических текстов). Русский язык (для общения). "
+    },
+    {
+        "name": "Frontend-разработчик",
+        "url": "https://hh.ru/vacancy/110327737",
+        "area": "Санкт-Петербург",
+        "salary": 0,
+        "description": "Рабочий стек: React; Redux; Formik; Jest; Enzyme; RestAPi; Docker. Инфраструктурная платформа: Gitlab (CI билды, тесты, деплой). Свободное владение TypeScript (от..."
+    },
+    {
+        "name": "Senior Backend Developer (Python)",
+        "url": "https://hh.ru/vacancy/108811289",
+        "area": "Москва",
+        "salary": 0,
+        "description": "Опыт построения высоконагруженных сервисов и обеспечения их доступности и надёжности. Опыт <highlighttext>разработки</highlighttext> на Python от 3-х лет. "
+    },
+    {
+        "name": "Backend-разработчик",
+        "url": "https://hh.ru/vacancy/110325720",
+        "area": "Москва",
+        "salary": 0,
+        "description": "Опыт коммерческой <highlighttext>разработки</highlighttext> на Python от 2 лет. Глубокое знание Django или FastAPI. Опыт работы с PostgreSQL и проектированием баз..."
+    },
+    {
+        "name": "Barista// Бариста",
+        "url": "https://hh.ru/vacancy/108896873",
+        "area": "Алматы",
+        "salary": 0,
+        "description": "Your English is as good as your coffee-making skills. You energize people with your positivity and enthusiasm. "
+    }
+]
