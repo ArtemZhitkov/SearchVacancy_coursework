@@ -26,3 +26,6 @@ class FileWorker(ABC):
     def delete_vacancy(self, vacancy):
         """Метод удаляет выбранную вакансию"""
         pass
+
+    def save_to_file(self, vacancies_list):
+        pass

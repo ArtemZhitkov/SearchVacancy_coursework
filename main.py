@@ -1,40 +1,50 @@
-# Создание экземпляра класса для работы с API сайтов с вакансиями
 from src.search_vacancies import SearchVacancies
 from src.vacancy import Vacancy
-
-hh_api = SearchVacancies()
-
-# Получение вакансий с hh.ru в формате JSON
-hh_vacancies = hh_api.load_vacancies("Python")
-
-# Преобразование набора данных из JSON в список объектов
-vacancies_list = Vacancy.cast_to_object_list(hh_vacancies)
-
-# Пример работы конструктора класса с одной вакансией
-vacancy = Vacancy("Python Developer", "<https://hh.ru/vacancy/123456>", "100 000-150 000 руб.",
-                  "Требования: опыт работы от 3 лет...")
-
-# Сохранение информации о вакансиях в файл
-json_saver = JSONSaver()
-json_saver.add_vacancy(vacancy)
-json_saver.delete_vacancy(vacancy)
+from src.utils import filter_vacancies_by_keywords, get_top_n_by_salary, \
+    print_vacancies
+from src.fileworker import JSONSWorker
 
 
 # Функция для взаимодействия с пользователем
 def user_interaction():
-    platforms = ["HeadHunter"]
+    print("Вас приветствует программа поиска вакансий с сайта hh.ru")
     search_query = input("Введите поисковый запрос: ")
-    top_n = int(input("Введите количество вакансий для вывода в топ N: "))
-    filter_words = input("Введите ключевые слова для фильтрации вакансий: ").split()
-    salary_range = input("Введите диапазон зарплат: ")  # Пример: 100000 - 150000
+    filter_words = input("Введите ключевые слова для фильтрации вакансий разделяя пробелом: ").split()
+    top_n = int(input("Введите количество вакансий для вывода в топ N по зарплате: "))
+    print("Идет поиск вакансий...")
 
-    filtered_vacancies = filter_vacancies(vacancies_list, filter_words)
+    hh_api = SearchVacancies()
+    hh_vacancies = hh_api.load_vacancies(search_query)
+    vacancies_list = Vacancy.cast_to_object_list(hh_vacancies)
 
-    ranged_vacancies = get_vacancies_by_salary(filtered_vacancies, salary_range)
+    filtered_vacancies = filter_vacancies_by_keywords(vacancies_list, filter_words)
+    if top_n:
+        top_vacancies = get_top_n_by_salary(filtered_vacancies, top_n)
+    else:
+        print("Вы не ввели число вакансий, будет выведено 10 вакансий")
+        top_n = 10
+        top_vacancies = get_top_n_by_salary(filtered_vacancies, top_n)
 
-    sorted_vacancies = sort_vacancies(ranged_vacancies)
-    top_vacancies = get_top_vacancies(sorted_vacancies, top_n)
-    print_vacancies(top_vacancies)
+    user_response = input("Сохранить вакансии в файл? (yes/no): ").lower()
+    if user_response == "yes":
+        filename = input("Введите название файла: ")
+        if filename:
+            file = f"{filename}.json"
+            result = JSONSWorker(file)
+            result.save_to_file(top_vacancies)
+            print(f"Вакансии успешно сохранены в файл -> {file}")
+        else:
+            result = JSONSWorker()
+            result.save_to_file(top_vacancies)
+            print(f"Вакансии сохранены в файл по умолчанию -> vacancies.json")
+    else:
+        print("Вакансии не сохранены")
+
+    if top_vacancies:
+        print(f"Найдено {len(top_vacancies)} вакансий")
+        print_vacancies(top_vacancies)
+    else:
+        print("Ничего не найдено по Вашим критериям")
 
 
 if __name__ == "__main__":

@@ -22,7 +22,7 @@ class Vacancy:
     def __validate(self):
         """Метод валидации входных данных"""
         if not self.salary:
-            self.salary = "Не указана"
+            self.salary = 0
 
         if not self.description:
             self.description = "Описание отсутствует"
@@ -30,30 +30,35 @@ class Vacancy:
         if not self.area:
             self.area = "Регион не указан"
 
+    def __str__(self):
+        if self.salary == 0:
+            self.salary = "Не указана"
+            return f"{self.name}: {self.description}, Регион:{self.area}, Зарплата: {self.salary}, Ссылка: {self.url}"
+        else:
+            return f"{self.name}: {self.description}, Регион:{self.area}, Зарплата: {self.salary}, Ссылка: {self.url}"
+
     @classmethod
     def cast_to_object_list(cls, vacancies):
         """ Метод преобразовывает набор данных из JSON в список объектов """
-        data = json.loads(vacancies)
         vacancies_list = []
-        for item in data["items"]:
+        for item in vacancies:
             name = item.get("name")
             url = item.get("alternate_url")
             area = item.get("area").get("name")
-            salary = item.get("salary", "Не указана").get("from")
-            description = item.get("snippet", "Отсутствует").get("requirement", "Отсутствует")
+            if item["salary"] is None:
+                salary = 0
+            else:
+                salary = item.get("salary").get("from")
+            description = item.get("snippet").get("requirement")
             vacancies_list.append(cls(name, url, area, salary, description))
         return vacancies_list
 
     def __lt__(self, other):
         """Метод сравнивает между собой по зарплате и возвращает вакансию с большей зарплатой"""
-        if self.salary == "Не указана" or other.salary == "Не указана":
-            print("Не удалось выполнить сравнение т.к. зарплата не указана")
-
+        if self.salary < other.salary:
+            return other.salary
         else:
-            if self.salary < other.salary:
-                return other.salary
-            else:
-                return self.salary
+            return self.salary
 
     # def __eq__(self, other):
     #     if self.salary == "Не указана" or other.salary == "Не указана":

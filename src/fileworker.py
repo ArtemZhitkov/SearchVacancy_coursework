@@ -9,19 +9,14 @@ from src.vacancy import Vacancy
 class JSONSWorker(FileWorker):
     """Класс сохраняет данные в JSON-файл"""
 
-    def __init__(self, filename):
-        self.file_path = os.path.join(DATA_PATH, filename)
+    def __init__(self, filename="vacancies.json"):
+        self.__filename = filename
+        self.file_path = os.path.join(DATA_PATH, self.__filename)
 
-    def get_vacancies(self):
-        """Метод получает список вакансий из файла"""
-        with open(self.file_path, "r", encoding="utf-8") as file:
-            data = json.load(file)
-            return Vacancy.cast_to_object_list(data)
-
-    def add_vacancy(self, vacancy):
-        """Метод добавляет вакансию в существующий файл"""
-
-        with open(self.file_path, "a+") as file:
+    def save_to_file(self, vacancies):
+        """Метод сохраняющий список вакансий в JSON-файл"""
+        result = []
+        for vacancy in vacancies:
             vacancy_dict = {
                 "name": vacancy.name,
                 "url": vacancy.url,
@@ -29,13 +24,39 @@ class JSONSWorker(FileWorker):
                 "salary": vacancy.salary,
                 "description": vacancy.description
             }
-            if vacancy_dict not in json.load(file):
-                json.dump(vacancy_dict, file, ensure_ascii=False, indent=4)
-            else:
-                print("Вакансия уже существует")
+            result.append(vacancy_dict)
+        with open(self.file_path, "a+", encoding="utf-8") as file:
+            json.dump(result, file, ensure_ascii=False, indent=4)
+
+    def get_vacancies(self):
+        """Метод получает список вакансий из файла"""
+        with open(self.file_path, "r", encoding="utf-8") as file:
+            data = json.load(file)
+            vacancies = []
+            for item in data:
+                vacancies.append(Vacancy(**item))
+            return vacancies
+
+    def add_vacancy(self, vacancies):
+        """Метод добавляет вакансии в существующий файл"""
+
+        with open(self.file_path, "r+") as file:
+            data = json.load(file)
+            for vacancy in vacancies:
+                data.append({
+                    "name": vacancy.name,
+                    "url": vacancy.url,
+                    "area": vacancy.area,
+                    "salary": vacancy.salary,
+                    "description": vacancy.description
+                })
+            file.seek(0)
+            json.dump(data, file, ensure_ascii=False, indent=4)
 
     def delete_vacancy(self, vacancy):
         """Метод удаляет выбранную вакансию"""
-        with open(self.file_path, "a+") as file:
-            data = list(filter(lambda x: x.get("name") != vacancy.name, file))
+        with open(self.file_path, "r+") as file:
+            data = json.load(file)
+            data = list(filter(lambda x: x.get("name") != vacancy.name, data))
+            file.seek(0)
             json.dump(data, file, ensure_ascii=False, indent=4)
