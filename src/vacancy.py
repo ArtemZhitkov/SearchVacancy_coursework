@@ -1,17 +1,12 @@
-import json
+from typing import Any
 
 
 class Vacancy:
     """Класс для работы с вакансиями"""
-    __slots__ = (
-        "name",
-        "url",
-        "area",
-        "salary",
-        "description"
-    )
 
-    def __init__(self, name, url, area, salary, description):
+    __slots__ = ("name", "url", "area", "salary", "description")
+
+    def __init__(self, name, url, area, salary, description) -> None:
         self.name = name
         self.url = url
         self.area = area
@@ -19,7 +14,7 @@ class Vacancy:
         self.description = description
         self.__validate()
 
-    def __validate(self):
+    def __validate(self) -> None:
         """Метод валидации входных данных"""
         if not self.salary:
             self.salary = 0
@@ -30,7 +25,7 @@ class Vacancy:
         if not self.area:
             self.area = "Регион не указан"
 
-    def __str__(self):
+    def __str__(self) -> str:
         if self.salary == 0:
             self.salary = "Не указана"
             return f"{self.name}: {self.description}, Регион:{self.area}, Зарплата: {self.salary}, Ссылка: {self.url}"
@@ -38,8 +33,8 @@ class Vacancy:
             return f"{self.name}: {self.description}, Регион:{self.area}, Зарплата: {self.salary}, Ссылка: {self.url}"
 
     @classmethod
-    def cast_to_object_list(cls, vacancies):
-        """ Метод преобразовывает набор данных из JSON в список объектов """
+    def cast_to_object_list(cls, vacancies) -> list[Any]:
+        """Метод преобразовывает набор данных из JSON в список объектов"""
         vacancies_list = []
         for item in vacancies:
             name = item.get("name")
