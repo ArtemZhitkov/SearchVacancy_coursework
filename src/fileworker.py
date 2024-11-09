@@ -1,6 +1,6 @@
 import json
 import os
-from typing import Any, List, Dict
+from typing import Any, Dict, List
 
 from config import DATA_PATH
 from src.base_class import FileWorker
@@ -33,13 +33,15 @@ class JSONSWorker(FileWorker):
         """Метод сохраняющий список вакансий в JSON-файл"""
         data = self._load_data()
         for vacancy in vacancies:
-            data.append({
-                "name": vacancy.name,
-                "url": vacancy.url,
-                "area": vacancy.area,
-                "salary": vacancy.salary,
-                "description": vacancy.description,
-            })
+            data.append(
+                {
+                    "name": vacancy.name,
+                    "url": vacancy.url,
+                    "area": vacancy.area,
+                    "salary": vacancy.salary,
+                    "description": vacancy.description,
+                }
+            )
         self._save_data(data)
 
     def get_vacancies(self) -> List[Vacancy]:
@@ -50,13 +52,15 @@ class JSONSWorker(FileWorker):
     def add_vacancy(self, vacancy: Vacancy) -> None:
         """Метод добавляет вакансии в существующий файл"""
         data = self._load_data()
-        data.append({
-            "name": vacancy.name,
-            "url": vacancy.url,
-            "area": vacancy.area,
-            "salary": vacancy.salary,
-            "description": vacancy.description,
-        })
+        data.append(
+            {
+                "name": vacancy.name,
+                "url": vacancy.url,
+                "area": vacancy.area,
+                "salary": vacancy.salary,
+                "description": vacancy.description,
+            }
+        )
         self._save_data(data)
 
     def delete_vacancy(self, vacancy_name: str) -> None:
