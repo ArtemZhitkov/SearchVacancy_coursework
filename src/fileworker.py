@@ -1,6 +1,6 @@
 import json
 import os
-from typing import Any
+from typing import Any, List, Dict
 
 from config import DATA_PATH
 from src.base_class import FileWorker
@@ -14,52 +14,53 @@ class JSONSWorker(FileWorker):
         self.__filename = filename
         self.file_path = os.path.join(DATA_PATH, self.__filename)
 
-    def save_to_file(self, vacancies) -> None:
+        os.makedirs(os.path.dirname(self.file_path), exist_ok=True)
+        if not os.path.exists(self.file_path):
+            with open(self.file_path, "w", encoding="utf-8") as file:
+                json.dump([], file)
+
+    def _load_data(self) -> List[Dict[str, Any]]:
+        """Чтение данных из JSON-файла"""
+        with open(self.file_path, "r", encoding="utf-8") as file:
+            return json.load(file)
+
+    def _save_data(self, data: List[Dict[str, Any]]) -> None:
+        """Сохранение данных в JSON-файл"""
+        with open(self.file_path, "w", encoding="utf-8") as file:
+            json.dump(data, file, ensure_ascii=False, indent=4)
+
+    def save_to_file(self, vacancies: List[Vacancy]) -> None:
         """Метод сохраняющий список вакансий в JSON-файл"""
-        result = []
+        data = self._load_data()
         for vacancy in vacancies:
-            vacancy_dict = {
+            data.append({
                 "name": vacancy.name,
                 "url": vacancy.url,
                 "area": vacancy.area,
                 "salary": vacancy.salary,
                 "description": vacancy.description,
-            }
-            result.append(vacancy_dict)
-        with open(self.file_path, "a+", encoding="utf-8") as file:
-            json.dump(result, file, ensure_ascii=False, indent=4)
+            })
+        self._save_data(data)
 
-    def get_vacancies(self) -> Any:
+    def get_vacancies(self) -> List[Vacancy]:
         """Метод получает список вакансий из файла"""
-        with open(self.file_path, "r", encoding="utf-8") as file:
-            data = json.load(file)
-            vacancies = []
-            for item in data:
-                vacancies.append(Vacancy(**item))
-            return vacancies
+        data = self._load_data()
+        return [Vacancy(**item) for item in data]
 
-    def add_vacancy(self, vacancies) -> None:
+    def add_vacancy(self, vacancy: Vacancy) -> None:
         """Метод добавляет вакансии в существующий файл"""
+        data = self._load_data()
+        data.append({
+            "name": vacancy.name,
+            "url": vacancy.url,
+            "area": vacancy.area,
+            "salary": vacancy.salary,
+            "description": vacancy.description,
+        })
+        self._save_data(data)
 
-        with open(self.file_path, "r+") as file:
-            data = json.load(file)
-            for vacancy in vacancies:
-                data.append(
-                    {
-                        "name": vacancy.name,
-                        "url": vacancy.url,
-                        "area": vacancy.area,
-                        "salary": vacancy.salary,
-                        "description": vacancy.description,
-                    }
-                )
-            file.seek(0)
-            json.dump(data, file, ensure_ascii=False, indent=4)
-
-    def delete_vacancy(self, vacancy) -> None:
+    def delete_vacancy(self, vacancy_name: str) -> None:
         """Метод удаляет выбранную вакансию"""
-        with open(self.file_path, "r+") as file:
-            data = json.load(file)
-            data = list(filter(lambda x: x.get("name") != vacancy.name, data))
-            file.seek(0)
-            json.dump(data, file, ensure_ascii=False, indent=4)
+        data = self._load_data()
+        data = [item for item in data if item["name"] != vacancy_name]
+        self._save_data(data)
